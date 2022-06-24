@@ -85,8 +85,8 @@
         function Add () {
 
             const [state, setState] = React.useState({
-                num1:Math.floor(Math.random()*10),
-                num2:Math.floor(Math.random()*10),
+                num1:Math.floor(Math.random()*100),
+                num2:Math.floor(Math.random()*100),
                 score:0,
                 result: "______",
                 response:""
@@ -105,8 +105,8 @@
                     // User got question Right
                     if (state.num1 + state.num2 === answer) {
                         setState({
-                            num1: Math.floor(Math.random()*10),
-                            num2: Math.floor(Math.random()*10),
+                            num1: Math.floor(Math.random()*100),
+                            num2: Math.floor(Math.random()*100),
                             score: state.score+1,
                             result: "Right",
                             response: ""
