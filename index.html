@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Math Quiz</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        
+        body {
+            background-color: aliceblue;
+            font-family: 'Fira Code';
+        }
+
+        p {
+            font-size: 20px;
+        }
+        
+        #question {
+            padding: 10px;
+            font-size: 40px;
+        }
+
+        #main {
+            padding: 75px;
+            position: fixed;
+            top: 30%;
+            left: 47.5%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        #submain { 
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes hor {
+            from {
+                margin-left: 0%;
+            } to {
+                margin-left: 100%;
+            }
+        }
+        @keyframes ver {
+            from {
+                margin-top: 0%;
+            } to {
+                margin-top: 100%;
+            }
+        }
+
+        #restart {
+            border: 1px;
+            top: 160%;
+            left: 40%;
+            position: fixed;
+        }
+
+        #winner {
+            position: relative;
+            animation-name: hor, ver;
+            animation-duration: 1.441s, 1.0014s;
+            animation-direction: alternate;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            font-size: 50px;
+        }
+
+        button {
+            font-size: 20px;
+            font-family: 'Fira Code';
+            background-color: aqua;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+    <script type="text/babel">
+
+        function Add () {
+
+            const [state, setState] = React.useState({
+                num1:Math.floor(Math.random()*10),
+                num2:Math.floor(Math.random()*10),
+                score:0,
+                result: "______",
+                response:""
+            })
+
+            function updateResponse(event) {
+                setState({
+                    ...state,
+                    response: event.target.value
+                })
+            }
+
+            function inputKeyPress(event) {
+                if (event.key === "Enter") {
+                    let answer = parseInt(state.response)
+                    // User got question Right
+                    if (state.num1 + state.num2 === answer) {
+                        setState({
+                            num1: Math.floor(Math.random()*10),
+                            num2: Math.floor(Math.random()*10),
+                            score: state.score+1,
+                            result: "Right",
+                            response: ""
+                        })
+                    } else { //User got question Wrong
+                        setState({
+                            ...state,
+                            response:"",
+                            score: state.score-1,
+                            result: "Wrong"
+                        })
+                    }
+                }
+            }
+
+            function restartQuiz(){
+                setState({
+                    ...state,
+                    result:"",
+                    score:0
+                })
+                return (
+                <div>
+                    <p id="question">{state.num1} + {state.num2}</p>
+                    <input autoFocus={true} onKeyPress={inputKeyPress} onChange={updateResponse} value={state.response}/>
+                    <p> Answer is {state.result} </p>
+                    <p> Score: {state.score} </p>    
+                </div>
+            )
+            }
+
+            if (state.score === 10) {
+                return (
+                    <div>
+                        <div id="submain">
+                            <h1 id="winner">You Won!</h1>
+                        </div>
+                        <div id="restart">
+                            <button onClick={restartQuiz}>Restart</button>
+                        </div>
+                    </div>
+                )
+            }
+
+            
+            return (
+                <div>
+                    <h1>Welcome to Math Quiz</h1>
+                    <p>Target: 10</p>
+                    <p id="question">{state.num1} + {state.num2}</p>
+                    <input autoFocus={true} onKeyPress={inputKeyPress} onChange={updateResponse} value={state.response}/>
+                    <p> Answer is {state.result} </p>
+                    <p> Score is {state.score} </p>    
+                </div>
+                )
+        }
+        ReactDOM.render(<Add />, document.querySelector('#main'));
+    </script>
+</body>
+</html>
